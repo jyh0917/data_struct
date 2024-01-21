@@ -14,11 +14,16 @@ Status Init(SqList &L);
 void Init_SqList(SqList &L);
 //打印顺序表
 Status printf_Sq(SqList L);
+//增加元素
+void addSqList(SqList &L);
+
 
 int main(){
     SqList L;
     Init(L);
     Init_SqList(L);
+    printf_Sq(L);
+    addSqList(L);
     printf_Sq(L);
     return 0;
 }
@@ -70,7 +75,7 @@ void Init_SqList(SqList &L){
         while(1){
             scanf_s("%d",&e,sizeof (ElemType));
             if(e == -9999){
-                printf("请问该元素是否是结束标志\n1.是\n2.不是\n");
+                printf("请问该元素是否是结束标志\n1.是\n2.不是\n");        /*其实这里还有个异常,如果输入的cho是别的数字,应当处理*/
                 int cho = 0;
                 scanf_s("%d",&cho,sizeof (cho));
                 if(cho==1)break;
@@ -103,3 +108,59 @@ Status printf_Sq(SqList L){
         }
     }
 }
+
+//增加元素
+//1.末尾增加元素
+//2.指定位置增加元素
+void addSqList(SqList &L){
+    int choose = 0;
+    ElemType e;
+    printf("1.末尾增加元素\n2.指定位置增加元素\n");
+    while(1) {
+        here:
+        printf("请选择:\n");
+        scanf_s("%d", &choose, sizeof(choose));
+        //末尾增加元素
+        if(choose==1){
+            printf("请输入元素\n");
+            scanf_s("%d", &e, sizeof(e));
+            ElemType*p = L.elem;
+            p = p + L.size;
+            *p = e;
+        }
+        //指定位置增加元素
+        else if(choose==2){
+            //先判断越界
+            if(L.size+1>L.capacity){
+                L.elem = (ElemType*)realloc(L.elem,sizeof(L.size + In_Size));
+                if(!L.elem){
+                    return;
+                }
+            }
+            printf("请输入要插入的位置\n");
+            int index;
+            scanf_s("%d", &index, sizeof(index));
+            // p 是插入的位置
+            ElemType*p = L.elem+index;
+            // q 是末尾位置
+            ElemType*q = L.elem+L.size;
+            while(q!=p){
+                *(q+1) = *q;
+                q--;
+            }
+            *(q+1) = *q;
+            *p = e;
+        }else{
+            goto here;
+        }
+    }
+}
+
+//删除元素
+
+
+//修改元素
+
+
+//排序
+
